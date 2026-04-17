@@ -1,11 +1,35 @@
 import { useState } from "react";
 import VentaForm from "./components/VentaForm";
 import GastoForm from "./components/GastoForm";
+import { db } from "./firebase";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { useEffect } from "react";
+console.log("DB:", db);
 
-function App() {
+  
+function App(){
+const [ventas, setVentas] = useState([]);
+const [gastos, setGastos] = useState([]); 
+  useEffect(() => {
+  const obtenerVentas = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "ventas"));
 
-  const [ventas, setVentas] = useState([]);
-const [gastos, setGastos] = useState([]);
+      const ventasFirebase = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setVentas(ventasFirebase);
+    } catch (error) {
+      console.error("Error trayendo ventas:", error);
+    }
+  };
+
+  obtenerVentas();
+}, []);
+
+
  
 
  const totalVentas = ventas.reduce((acc, venta) => {
@@ -15,6 +39,7 @@ const [gastos, setGastos] = useState([]);
 const totalGastos = gastos.reduce((acc, gasto) => {
   return acc + gasto.monto;
 }, 0);
+console.log("TEST FIREBASE");
 
   return (
     <div style={{ padding: "20px" }}>
@@ -24,7 +49,18 @@ const totalGastos = gastos.reduce((acc, gasto) => {
 <h2>Ganancia: ${totalVentas - totalGastos}</h2>
 
       <VentaForm
-  onAgregarVenta={(venta) => setVentas([...ventas, venta])}
+onAgregarVenta={async (venta) => {
+  console.log("INTENTANDO GUARDAR:", venta);
+
+  try {
+    const docRef = await addDoc(collection(db, "ventas"), venta);
+    console.log("GUARDADO OK:", docRef.id);
+
+    setVentas((prev) => [...prev, venta]);
+  } catch (e) {
+    console.error("ERROR FIREBASE:", e);
+  }
+}}
   
 />
 <GastoForm

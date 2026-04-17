@@ -8,6 +8,8 @@ function VentaForm({ onAgregarVenta }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    console.log("FORM SUBMIT");
+
     const nuevaVenta = {
       producto,
       precio: Number(precio),
