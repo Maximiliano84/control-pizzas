@@ -15,6 +15,7 @@ function VentaForm({ onAgregarVenta }) {
       precio: Number(precio),
       cantidad: Number(cantidad),
       fecha: new Date().toLocaleString(),
+      timestamp: Date.now()
     };
 
     onAgregarVenta(nuevaVenta);

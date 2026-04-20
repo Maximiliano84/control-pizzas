@@ -11,6 +11,7 @@ function GastoForm({ onAgregarGasto }) {
       descripcion,
       monto: Number(monto),
       fecha: new Date().toLocaleString(),
+      timestamp: Date.now()
     };
 
     onAgregarGasto(nuevoGasto);
