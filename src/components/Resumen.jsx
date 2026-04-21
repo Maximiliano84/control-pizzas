@@ -2,44 +2,59 @@ function Resumen({
     totalVentasHoy,
     totalGastosHoy,
     gananciaHoy,
-    cantidadVentasHoy,
-    ticketPromedioHoy,
-    productoMasVendido,
 
     totalVentasSemana,
     totalGastosSemana,
     gananciaSemana,
-    cantidadVentasSemana,
 
     totalVentasMes,
     totalGastosMes,
     gananciaMes,
-    cantidadVentasMes,
 }) {
+    // 🔥 función para colores (PRO)
+    const getColor = (valor) => {
+        const num = Number(valor);
+
+        if (isNaN(num)) return "neutro"; // por si viene mal
+        if (Math.abs(num) < 0.01) return "neutro"; // 🔥 trata casi 0 como 0
+        if (num > 0) return "positivo";
+        return "negativo";
+    };
+
     return (
-        <div>
-            <h2>HOY</h2>
-            <p>Ventas: ${totalVentasHoy}</p>
-            <p>Gastos: ${totalGastosHoy}</p>
-            <p>Ganancia: ${gananciaHoy}</p>
-            <p>Pizzas vendidas: {cantidadVentasHoy}</p>
-            <p>Ticket promedio: ${Math.round(ticketPromedioHoy)}</p>
-            <p>
-                Producto más vendido:{" "}
-                {productoMasVendido ? productoMasVendido[0] : "N/A"}
-            </p>
+        <div className="grid">
+            {/* HOY */}
+            <div className={`card ${getColor(gananciaHoy)}`}>
+                <h3>Hoy</h3>
+                <p>Ventas: ${totalVentasHoy}</p>
+                <p>Gastos: ${totalGastosHoy}</p>
 
-            <h2>SEMANA</h2>
-            <p>Ventas: ${totalVentasSemana}</p>
-            <p>Gastos: ${totalGastosSemana}</p>
-            <p>Ganancia: ${gananciaSemana}</p>
-            <p>Pizzas vendidas: {cantidadVentasSemana}</p>
+                <h2 className={getColor(gananciaHoy)}>
+                    ${gananciaHoy}
+                </h2>
+            </div>
 
-            <h2>MES</h2>
-            <p>Ventas: ${totalVentasMes}</p>
-            <p>Gastos: ${totalGastosMes}</p>
-            <p>Ganancia: ${gananciaMes}</p>
-            <p>Pizzas vendidas: {cantidadVentasMes}</p>
+            {/* SEMANA */}
+            <div className={`card ${getColor(gananciaSemana)}`}>
+                <h3>Semana</h3>
+                <p>Ventas: ${totalVentasSemana}</p>
+                <p>Gastos: ${totalGastosSemana}</p>
+
+                <h2 className={getColor(gananciaSemana)}>
+                    ${gananciaSemana}
+                </h2>
+            </div>
+
+            {/* MES */}
+            <div className={`card ${getColor(gananciaMes)}`}>
+                <h3>Mes</h3>
+                <p>Ventas: ${totalVentasMes}</p>
+                <p>Gastos: ${totalGastosMes}</p>
+
+                <h2 className={getColor(gananciaMes)}>
+                    ${gananciaMes}
+                </h2>
+            </div>
         </div>
     );
 }

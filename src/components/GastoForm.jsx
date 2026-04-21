@@ -3,26 +3,38 @@ import { useState } from "react";
 function GastoForm({ onAgregarGasto }) {
   const [descripcion, setDescripcion] = useState("");
   const [monto, setMonto] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // 🔴 VALIDACIÓN
+    if (!descripcion.trim() || !monto) {
+      setError("⚠️ Completá todos los campos");
+      return;
+    }
 
     const nuevoGasto = {
       descripcion,
       monto: Number(monto),
       fecha: new Date().toLocaleString(),
-      timestamp: Date.now()
+      timestamp: Date.now(), // 🔥 importante
     };
 
     onAgregarGasto(nuevoGasto);
 
+    // 🧹 limpiar
     setDescripcion("");
     setMonto("");
+    setError("");
   };
 
   return (
-    <div>
+    <div className="card">
       <h2>Cargar Gasto</h2>
+
+      {/* ⚠️ MENSAJE DE ERROR */}
+      {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleSubmit}>
         <input
@@ -31,7 +43,6 @@ function GastoForm({ onAgregarGasto }) {
           value={descripcion}
           onChange={(e) => setDescripcion(e.target.value)}
         />
-        <br /><br />
 
         <input
           type="number"
@@ -39,11 +50,12 @@ function GastoForm({ onAgregarGasto }) {
           value={monto}
           onChange={(e) => setMonto(e.target.value)}
         />
-        <br /><br />
-
+        <div className="spacer"></div>
         <button type="submit">Guardar gasto</button>
       </form>
     </div>
+
+
   );
 }
 

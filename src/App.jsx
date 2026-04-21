@@ -5,7 +5,8 @@ import { db } from "./firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { useEffect } from "react";
 import Resumen from "./components/Resumen";
-console.log("DB:", db);
+import { deleteDoc, doc } from "firebase/firestore";
+import "./styles.css";
 
 
 function App() {
@@ -166,48 +167,76 @@ function App() {
   );
 
   const gananciaMes = totalVentasMes - totalGastosMes;
+  //eliminar gastos
+  const eliminarGasto = async (id) => {
+    try {
+      await deleteDoc(doc(db, "gastos", id));
+      setGastos((prev) => prev.filter((g) => g.id !== id));
+    } catch (error) {
+      console.error("Error eliminando gasto:", error);
+    }
+  };
+  //eliminar ventas
+  const eliminarVenta = async (id) => {
+    try {
+      await deleteDoc(doc(db, "ventas", id));
+      setVentas((prev) => prev.filter((v) => v.id !== id));
+    } catch (error) {
+      console.error("Error eliminando venta:", error);
+    }
+
+
+  };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="container">
 
+      <h1 className="title">Control de Ventas 🍕</h1>
 
+      <div className="flex">
+        <VentaForm
+          onAgregarVenta={async (venta) => {
+            console.log("INTENTANDO GUARDAR:", venta);
 
-      <h1>Control de Ventas</h1>
+            try {
+              const docRef = await addDoc(collection(db, "ventas"), venta);
+              console.log("GUARDADO OK:", docRef.id);
 
-      <VentaForm
-        onAgregarVenta={async (venta) => {
-          console.log("INTENTANDO GUARDAR:", venta);
+              setVentas((prev) => [...prev, { ...venta, id: docRef.id }]);
+            } catch (e) {
+              console.error("ERROR FIREBASE:", e);
+            }
+          }}
 
-          try {
-            const docRef = await addDoc(collection(db, "ventas"), venta);
-            console.log("GUARDADO OK:", docRef.id);
+        />
 
-            setVentas((prev) => [...prev, venta]);
-          } catch (e) {
-            console.error("ERROR FIREBASE:", e);
-          }
-        }}
+        <GastoForm
+          onAgregarGasto={async (gasto) => {
+            console.log("GUARDANDO GASTO:", gasto);
 
-      />
-      <GastoForm
-        onAgregarGasto={async (gasto) => {
-          console.log("GUARDANDO GASTO:", gasto);
+            try {
+              const docRef = await addDoc(collection(db, "gastos"), gasto);
+              console.log("GASTO OK:", docRef.id);
 
-          try {
-            const docRef = await addDoc(collection(db, "gastos"), gasto);
-            console.log("GASTO OK:", docRef.id);
-
-            setGastos((prev) => [...prev, gasto]);
-          } catch (e) {
-            console.error("ERROR GASTO:", e);
-          }
-        }}
-      />
-
+              setGastos((prev) => [...prev, { ...gasto, id: docRef.id }]);
+            } catch (e) {
+              console.error("ERROR GASTO:", e);
+            }
+          }}
+        />
+      </div>
 
       <h2>Total vendido: ${totalVentas}</h2>
       <h2>Total gastos: ${totalGastos}</h2>
-      <h2>Ganancia: ${totalVentas - totalGastos}</h2>
+      <h2 className={
+        gananciaHoy > 0
+          ? "positivo"
+          : gananciaHoy < 0
+            ? "negativo"
+            : "neutro"
+      }>
+        Ganancia: ${totalVentas - totalGastos}
+      </h2>
 
       <Resumen
         totalVentasHoy={totalVentasHoy}
@@ -236,8 +265,12 @@ function App() {
           .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
           .slice(0, 10)
           .map((venta, index) => (
-            <li key={index}>
+            <li key={venta.id || index}>
               {venta.producto} - ${venta.precio} x {venta.cantidad} | {venta.fecha}
+
+              <button onClick={() => eliminarVenta(venta.id)}>
+                ❌
+              </button>
             </li>
 
           ))}
@@ -253,8 +286,12 @@ function App() {
           .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
           .slice(0, 10)
           .map((gasto, index) => (
-            <li key={index}>
+            <li key={gasto.id || index}>
               {gasto.descripcion} - ${gasto.monto} | {gasto.fecha}
+
+              <button onClick={() => eliminarGasto(gasto.id)}>
+                ❌
+              </button>
             </li>
           ))}
       </ul>

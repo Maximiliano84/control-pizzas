@@ -1,6 +1,8 @@
 import { useState } from "react";
 
+
 function VentaForm({ onAgregarVenta }) {
+  const [error, setError] = useState("");
   const [producto, setProducto] = useState("");
   const [precio, setPrecio] = useState("");
   const [cantidad, setCantidad] = useState("");
@@ -8,14 +10,17 @@ function VentaForm({ onAgregarVenta }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("FORM SUBMIT");
+    if (!producto || !precio || !cantidad) {
+      setError("⚠️ Completá todos los campos");
+      return;
+    }
 
     const nuevaVenta = {
       producto,
       precio: Number(precio),
       cantidad: Number(cantidad),
       fecha: new Date().toLocaleString(),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     onAgregarVenta(nuevaVenta);
@@ -23,12 +28,13 @@ function VentaForm({ onAgregarVenta }) {
     setProducto("");
     setPrecio("");
     setCantidad("");
+    setError("");
   };
 
   return (
-    <div>
+    <div className="card">
       <h2>Cargar Venta</h2>
-
+      {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -36,7 +42,6 @@ function VentaForm({ onAgregarVenta }) {
           value={producto}
           onChange={(e) => setProducto(e.target.value)}
         />
-        <br /><br />
 
         <input
           type="number"
@@ -44,7 +49,6 @@ function VentaForm({ onAgregarVenta }) {
           value={precio}
           onChange={(e) => setPrecio(e.target.value)}
         />
-        <br /><br />
 
         <input
           type="number"
@@ -52,11 +56,12 @@ function VentaForm({ onAgregarVenta }) {
           value={cantidad}
           onChange={(e) => setCantidad(e.target.value)}
         />
-        <br /><br />
+
 
         <button type="submit">Guardar venta</button>
       </form>
     </div>
+
   );
 }
 
