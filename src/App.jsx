@@ -5,13 +5,18 @@ import { db } from "./firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { useEffect } from "react";
 import Resumen from "./components/Resumen";
+import Detalle from "./components/Detalle";
+import DetallePeriodo from "./components/DetallePeriodo";
 import { deleteDoc, doc } from "firebase/firestore";
 import "./styles.css";
 
 
 function App() {
+  const [vista, setVista] = useState("home");
+  const [filtro, setFiltro] = useState(null);
   const [ventas, setVentas] = useState([]);
   const [gastos, setGastos] = useState([]);
+
   useEffect(() => {
     const obtenerVentas = async () => {
       try {
@@ -187,7 +192,16 @@ function App() {
 
 
   };
-
+  if (vista === "detalle") {
+    return (
+      <DetallePeriodo
+        ventas={ventas}
+        gastos={gastos}
+        tipo={filtro}
+        volver={() => setVista("home")}
+      />
+    );
+  }
   return (
     <div className="container">
 
@@ -226,17 +240,31 @@ function App() {
         />
       </div>
 
-      <h2>Total vendido: ${totalVentas}</h2>
-      <h2>Total gastos: ${totalGastos}</h2>
-      <h2 className={
-        gananciaHoy > 0
-          ? "positivo"
-          : gananciaHoy < 0
-            ? "negativo"
-            : "neutro"
-      }>
-        Ganancia: ${totalVentas - totalGastos}
-      </h2>
+      <div className="resumen-general">
+        <div>
+          <p>Total vendido</p>
+          <h2>${totalVentas}</h2>
+        </div>
+
+        <div>
+          <p>Total gastos</p>
+          <h2>${totalGastos}</h2>
+        </div>
+
+        <div>
+          <p>Ganancia total</p>
+          <h2 className={
+            totalVentas - totalGastos > 0
+              ? "positivo"
+              : totalVentas - totalGastos < 0
+                ? "negativo"
+                : "neutro"
+          }>
+            ${totalVentas - totalGastos}
+          </h2>
+        </div>
+      </div>
+
 
       <Resumen
         totalVentasHoy={totalVentasHoy}
@@ -255,48 +283,65 @@ function App() {
         totalGastosMes={totalGastosMes}
         gananciaMes={gananciaMes}
         cantidadVentasMes={cantidadVentasMes}
-      />
 
+        onSeleccionar={(tipo) => {
+          console.log("CLICK:", tipo);
+          setFiltro(tipo);
+          setVista("detalle");
+        }}
+      />
       <hr />
 
-      <h2>Ultimas ventas</h2>
-      <ul>
-        {[...ventas]
-          .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-          .slice(0, 10)
-          .map((venta, index) => (
-            <li key={venta.id || index}>
-              {venta.producto} - ${venta.precio} x {venta.cantidad} | {venta.fecha}
+      {/* listas ultimas ventas/gastos */}
+      <div className="listas-container">
+        <div className="lista-box ventas">
+          <h2>Últimas ventas</h2>
+          <div className="lista">
+            {[...ventas]
+              .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+              .slice(0, 10)
+              .map((venta) => (
+                <div className="item" key={venta.id}>
+                  <div>
+                    <strong>{venta.producto}</strong>
+                    <p>{venta.fecha}</p>
+                  </div>
 
-              <button onClick={() => eliminarVenta(venta.id)}>
-                ❌
-              </button>
-            </li>
+                  <div className="item-right">
+                    <p>${venta.precio} x {venta.cantidad}</p>
+                    <button onClick={() => eliminarVenta(venta.id)}>❌</button>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
 
-          ))}
+        <div className="lista-box gastos">
+          <h2>Últimos gastos</h2>
+          <div className="lista">
+            {[...gastos]
+              .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+              .slice(0, 10)
+              .map((gasto) => (
+                <div className="item" key={gasto.id}>
+                  <div>
+                    <strong>{gasto.descripcion}</strong>
+                    <p>{gasto.fecha}</p>
+                  </div>
 
-      </ul>
-
-
-
-      <h2>Ultimos gastos</h2>
-
-      <ul>
-        {[...gastos]
-          .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-          .slice(0, 10)
-          .map((gasto, index) => (
-            <li key={gasto.id || index}>
-              {gasto.descripcion} - ${gasto.monto} | {gasto.fecha}
-
-              <button onClick={() => eliminarGasto(gasto.id)}>
-                ❌
-              </button>
-            </li>
-          ))}
-      </ul>
+                  <div className="item-right">
+                    <p>${gasto.monto}</p>
+                    <button onClick={() => eliminarGasto(gasto.id)}>❌</button>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      </div>
 
     </div>
+
+
   );
 }
 

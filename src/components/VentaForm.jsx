@@ -32,7 +32,7 @@ function VentaForm({ onAgregarVenta }) {
   };
 
   return (
-    <div className="card">
+    <div className="card3">
       <h2>Cargar Venta</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>

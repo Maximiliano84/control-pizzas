@@ -2,14 +2,20 @@ function Resumen({
     totalVentasHoy,
     totalGastosHoy,
     gananciaHoy,
+    cantidadVentasHoy,
+    onSeleccionar,
 
     totalVentasSemana,
     totalGastosSemana,
     gananciaSemana,
+    cantidadVentasSemana,
+
 
     totalVentasMes,
     totalGastosMes,
     gananciaMes,
+    cantidadVentasMes,
+
 }) {
     // 🔥 función para colores (PRO)
     const getColor = (valor) => {
@@ -24,36 +30,38 @@ function Resumen({
     return (
         <div className="grid">
             {/* HOY */}
-            <div className={`card ${getColor(gananciaHoy)}`}>
+            <div className="card1" onClick={() => onSeleccionar("hoy")}>
                 <h3>Hoy</h3>
-                <p>Ventas: ${totalVentasHoy}</p>
-                <p>Gastos: ${totalGastosHoy}</p>
 
-                <h2 className={getColor(gananciaHoy)}>
+                <h1 className={getColor(gananciaHoy)}>
                     ${gananciaHoy}
-                </h2>
+                </h1>
+
+                <p>{cantidadVentasHoy} pizzas</p>
+                <p>Gastos: ${totalGastosHoy}</p>
+                <p>Ventas: ${totalVentasHoy} </p>
             </div>
 
             {/* SEMANA */}
-            <div className={`card ${getColor(gananciaSemana)}`}>
+            <div className="card1" onClick={() => onSeleccionar("semana")}>
                 <h3>Semana</h3>
+                <p>Pizzas: {cantidadVentasSemana}</p>
                 <p>Ventas: ${totalVentasSemana}</p>
                 <p>Gastos: ${totalGastosSemana}</p>
-
-                <h2 className={getColor(gananciaSemana)}>
-                    ${gananciaSemana}
-                </h2>
+                <p className={getColor(gananciaSemana)}>
+                    Ganancia: ${gananciaSemana}
+                </p>
             </div>
 
             {/* MES */}
-            <div className={`card ${getColor(gananciaMes)}`}>
+            <div className="card1" onClick={() => onSeleccionar("mes")}>
                 <h3>Mes</h3>
+                <p>Pizzas: {cantidadVentasMes}</p>
                 <p>Ventas: ${totalVentasMes}</p>
                 <p>Gastos: ${totalGastosMes}</p>
-
-                <h2 className={getColor(gananciaMes)}>
-                    ${gananciaMes}
-                </h2>
+                <p className={getColor(gananciaMes)}>
+                    Ganancia: ${gananciaMes}
+                </p>
             </div>
         </div>
     );
