@@ -1,10 +1,19 @@
 import { useState } from "react";
 
+const PRODUCTOS = [
+  { nombre: "Margarita", precio: 5000 },
+  { nombre: "Napolitana", precio: 5500 },
+  { nombre: "Fugazzeta", precio: 6000 },
+  { nombre: "Calabresa", precio: 6200 },
+  { nombre: "Especial", precio: 7000 },
+  { nombre: "Otro", precio: null },
+];
 
 function VentaForm({ onAgregarVenta }) {
   const [error, setError] = useState("");
   const [producto, setProducto] = useState("");
   const [precio, setPrecio] = useState("");
+  const [esManual, setEsManual] = useState(false);
   const [cantidad, setCantidad] = useState("");
 
   const handleSubmit = (e) => {
