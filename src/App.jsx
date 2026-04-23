@@ -302,13 +302,18 @@ function App() {
               .slice(0, 10)
               .map((venta) => (
                 <div className="item" key={venta.id}>
-                  <div>
+                  <div className="left">
                     <strong>{venta.producto}</strong>
-                    <p>{venta.fecha}</p>
                   </div>
 
-                  <div className="item-right">
-                    <p>${venta.precio} x {venta.cantidad}</p>
+                  <div className="middle">
+                    ${venta.precio} × {venta.cantidad}
+                  </div>
+
+                  <div className="right">
+                    <span className="total">
+                      ${venta.precio * venta.cantidad}
+                    </span>
                     <button onClick={() => eliminarVenta(venta.id)}>❌</button>
                   </div>
                 </div>
@@ -324,13 +329,14 @@ function App() {
               .slice(0, 10)
               .map((gasto) => (
                 <div className="item" key={gasto.id}>
-                  <div>
+                  <div className="left">
                     <strong>{gasto.descripcion}</strong>
-                    <p>{gasto.fecha}</p>
                   </div>
 
-                  <div className="item-right">
-                    <p>${gasto.monto}</p>
+                  <div className="middle"></div>
+
+                  <div className="right">
+                    <span className="total">${gasto.monto}</span>
                     <button onClick={() => eliminarGasto(gasto.id)}>❌</button>
                   </div>
                 </div>

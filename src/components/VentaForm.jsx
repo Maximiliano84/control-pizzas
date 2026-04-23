@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRef } from "react";
 
 const PRODUCTOS = [
   { nombre: "Margarita", precio: 5000 },
@@ -15,12 +16,25 @@ function VentaForm({ onAgregarVenta }) {
   const [precio, setPrecio] = useState("");
   const [esManual, setEsManual] = useState(false);
   const [cantidad, setCantidad] = useState("");
-
+  const cantidadRef = useRef(null);
+  const productoRef = useRef(null);
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!producto || !precio || !cantidad) {
+    if (!producto || precio === "" || !cantidad) {
       setError("⚠️ Completá todos los campos");
+      return;
+    }
+
+    // VALIDACIÓN REAL
+    if (
+      !producto ||
+      precio === "" ||
+      !cantidad ||
+      Number(precio) <= 0 ||
+      Number(cantidad) <= 0
+    ) {
+      setError("⚠️ Revisá los datos");
       return;
     }
 
@@ -34,10 +48,15 @@ function VentaForm({ onAgregarVenta }) {
 
     onAgregarVenta(nuevaVenta);
 
+    // 🔥 limpiar correctamente
     setProducto("");
     setPrecio("");
     setCantidad("");
+    setEsManual(false);
     setError("");
+
+    // 🔥 volver al inicio
+    setTimeout(() => productoRef.current?.focus(), 100);
   };
 
   return (
@@ -45,21 +64,47 @@ function VentaForm({ onAgregarVenta }) {
       <h2>Cargar Venta</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Producto"
+        <select
+          ref={productoRef}
           value={producto}
-          onChange={(e) => setProducto(e.target.value)}
-        />
+          onChange={(e) => {
+            const seleccionado = PRODUCTOS.find(
+              (p) => p.nombre === e.target.value
+            );
+
+            setProducto(seleccionado.nombre);
+
+            if (seleccionado.precio) {
+              setPrecio(seleccionado.precio);
+              setEsManual(false);
+            } else {
+              setPrecio("");
+              setEsManual(true);
+            }
+
+            // 🔥 foco automático
+            setTimeout(() => cantidadRef.current?.focus(), 100);
+
+          }}
+        >
+          <option value="">Seleccionar pizza</option>
+          {PRODUCTOS.map((p) => (
+            <option key={p.nombre} value={p.nombre}>
+              {p.nombre}
+            </option>
+          ))}
+        </select>
 
         <input
           type="number"
           placeholder="Precio"
           value={precio}
+          disabled={!esManual}
           onChange={(e) => setPrecio(e.target.value)}
         />
 
         <input
+          ref={cantidadRef}
           type="number"
           placeholder="Cantidad"
           value={cantidad}

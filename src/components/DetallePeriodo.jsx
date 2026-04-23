@@ -1,36 +1,57 @@
 import React from "react";
+import { useState } from "react";
 
 function DetallePeriodo({ ventas = [], gastos = [], tipo, volver }) {
-    const ahora = new Date();
+    const [fechaSeleccionada, setFechaSeleccionada] = useState(
+        new Date().toISOString().split("T")[0]
+    );
+
+
 
     // 🔥 FUNCION FILTRO AUTOMÁTICO
     const filtrar = (item) => {
-        if (!item.timestamp) return false;
+        if (!item.timestamp && !item.fecha) return false;
 
-        const f = new Date(item.timestamp);
+        const f = item.timestamp
+            ? new Date(item.timestamp)
+            : new Date(item.fecha);
 
-        // 👉 HOY
+        const [year, month, day] = fechaSeleccionada.split("-");
+        const base = new Date(year, month - 1, day);
+
+        // 🔥 HOY (según fecha elegida)
         if (tipo === "hoy") {
-            return f.toDateString() === ahora.toDateString();
-        }
+            const inicio = new Date(base);
+            inicio.setHours(0, 0, 0, 0);
 
-        // 👉 SEMANA ACTUAL
-        if (tipo === "semana") {
-            const inicio = new Date(ahora);
-            inicio.setDate(ahora.getDate() - ahora.getDay());
-
-            const fin = new Date(inicio);
-            fin.setDate(inicio.getDate() + 6);
+            const fin = new Date(base);
+            fin.setHours(23, 59, 59, 999);
 
             return f >= inicio && f <= fin;
         }
 
-        // 👉 MES ACTUAL
+        // 🔥 SEMANA
+        if (tipo === "semana") {
+            const inicio = new Date(base);
+            inicio.setDate(base.getDate() - base.getDay());
+            inicio.setHours(0, 0, 0, 0);
+
+            const fin = new Date(inicio);
+            fin.setDate(inicio.getDate() + 6);
+            fin.setHours(23, 59, 59, 999);
+
+            return f >= inicio && f <= fin;
+        }
+
+        // 🔥 MES
         if (tipo === "mes") {
-            return (
-                f.getMonth() === ahora.getMonth() &&
-                f.getFullYear() === ahora.getFullYear()
-            );
+            const inicio = new Date(base.getFullYear(), base.getMonth(), 1);
+            const fin = new Date(base.getFullYear(), base.getMonth() + 1, 0);
+
+            inicio.setHours(0, 0, 0, 0);
+            fin.setHours(23, 59, 59, 999);
+
+            return f >= inicio && f <= fin;
         }
 
         return false;
@@ -59,6 +80,11 @@ function DetallePeriodo({ ventas = [], gastos = [], tipo, volver }) {
             <button onClick={volver}>⬅ Volver</button>
 
             <h2>Detalle ({tipo})</h2>
+            <input
+                type="date"
+                value={fechaSeleccionada}
+                onChange={(e) => setFechaSeleccionada(e.target.value)}
+            />
 
             {/* 🔥 GANANCIA GRANDE */}
             <div style={{ textAlign: "center", margin: "20px 0" }}>

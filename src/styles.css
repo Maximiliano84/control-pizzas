@@ -148,116 +148,82 @@ button:hover {
     gap: 15px;
 }
 
-/* ESTILOS PARA LOS RESULTADOS */
-.card.positivo {
-    border-left: 2px solid green;
-    background: #f6fff6;
-}
-
-.card.negativo {
-    border-left: 2px solid red;
-    background: #fff6f6;
-}
-
-.card.neutro {
-    border-left: 2px solid gray;
-    background: #f7f7f7;
-}
 
 /* ESTILOS PARA LA LISTA DE VENTAS/GASTOS */
-.lista {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
-}
-
 .item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(2px);
     padding: 12px;
     border-radius: 8px;
+    background: rgba(255, 255, 255, 0.7);
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
-}
-
-.item:hover {
-    background: rgba(255, 255, 255, 0.9);
-}
-
-.item p {
-    margin: 2px 0;
-    font-size: 12px;
-    color: #666;
-}
-
-.item-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 120px;
-    justify-content: flex-end;
-}
-
-.item-right p {
-    width: 80px;
-    text-align: right;
-    margin: 0;
-}
-
-.item button {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-}
-
-.item button:hover {
-    transform: scale(1.2);
 }
 
 .listas-container {
     display: flex;
     gap: 20px;
     margin-top: 20px;
+
 }
 
 .lista-box {
     flex: 1;
 }
 
-.item-right {
+/* IZQUIERDA */
+.left {
+    flex: 1;
+    font-size: 14px;
+}
+
+/* CENTRO */
+.middle {
+    flex: 1;
+    text-align: center;
+    color: #666;
+    font-size: 13px;
+}
+
+/* DERECHA */
+.right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+
+/* TOTAL */
+.total {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+/* BOTÓN */
+.right button {
+    background: transparent;
+    width: 28px;
+    height: 28px;
+}
+
+.right button:hover {
+    transform: scale(1.2);
+}
+
+.delete-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-
-    min-width: 120px;
-    /* 🔥 clave */
+    justify-content: center;
 }
 
-.lista-box.ventas {
-    border-top: 3px solid green;
+.delete-btn:hover {
+    transform: scale(1.2);
 }
 
-.lista-box.gastos {
-    border-top: 3px solid red;
-}
-
-.lista-box {
-    background: #fff;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.lista-box {
-    background: transparent;
-}
 
 /* ESTILOS PARA EL RESUMEN GENERAL*/
 .resumen-general {

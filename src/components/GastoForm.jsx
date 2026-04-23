@@ -9,8 +9,13 @@ function GastoForm({ onAgregarGasto }) {
     e.preventDefault();
 
     // 🔴 VALIDACIÓN
-    if (!descripcion.trim() || !monto) {
+    if (!descripcion.trim() || monto === "") {
       setError("⚠️ Completá todos los campos");
+      return;
+    }
+
+    if (isNaN(Number(monto)) || Number(monto) <= 0) {
+      setError("⚠️ El monto debe ser mayor a 0");
       return;
     }
 

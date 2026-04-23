@@ -38,8 +38,8 @@ function Resumen({
                 </h1>
 
                 <p>{cantidadVentasHoy} pizzas</p>
-                <p>Gastos: ${totalGastosHoy}</p>
                 <p>Ventas: ${totalVentasHoy} </p>
+                <p>Gastos: ${totalGastosHoy}</p>
             </div>
 
             {/* SEMANA */}
