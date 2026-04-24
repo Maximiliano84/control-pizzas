@@ -252,7 +252,109 @@ button:hover {
     font-size: 24px;
 }
 
+.insights {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+}
 
+.insights p {
+    margin: 6px 0;
+}
+
+/* ESTILOS PARA LOS ENLACES DE REDES SOCIALES */
+.resumen-dia {
+    text-align: center;
+    margin: 25px 0;
+}
+
+.resumen-dia h1 {
+    font-size: 42px;
+    margin: 10px 0;
+}
+
+.resumen-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.resumen-stats div {
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    flex: 1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.resumen-stats span {
+    display: block;
+    font-size: 12px;
+    color: #777;
+}
+
+.resumen-stats strong {
+    font-size: 16px;
+}
+
+/* ESTILOS PARA EL DETALLE DE VENTA */
+.venta-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    border-radius: 10px;
+    background: #fff;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: 0.2s;
+    border-left: 4px solid #2ecc71
+}
+
+.venta-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.detalle {
+    font-size: 12px;
+    color: #777;
+}
+
+.venta-total {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* ESTILOS PARA EL DETALLE DE GASTO */
+.gasto-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    border-radius: 10px;
+    background: #fff;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    border-left: 4px solid #e74c3c;
+    /* 🔥 rojo sutil */
+}
+
+.grid-detalle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* ESTILOS responsive PARA EL DETALLE DE VENTA/GASTO */
+@media (max-width: 768px) {
+    .grid-detalle {
+        grid-template-columns: 1fr;
+    }
+}
 
 /* 📺 ESCRITORIO (3 fijas) */
 @media (min-width: 900px) {
@@ -260,6 +362,8 @@ button:hover {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+
 
 /* 📱 TABLET (2 columnas) */
 @media (min-width: 600px) and (max-width: 899px) {
